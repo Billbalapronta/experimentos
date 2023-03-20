@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+
+<style id="webmakerstyle">
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #eee;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: row;
+}
+
+.key {
+  height: 200px;
+  width: 60px;
+  margin-right: 1px;
+  background-color: white;
+  border: 1px solid black;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.black-key {
+  position: relative;
+  z-index: 1;
+  height: 120px;
+  width: 30px;
+  margin-right: -15px;
+  margin-left: -15px;
+  margin-top: -80px;
+  background-color: black;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.active {
+  transform: translateY(2px);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.9);
+  background-color: #e6e6e6;
+}
+
+.white-key:hover {
+  background-color: #e6e6e6;
+}
+
+.black-key:hover {
+  background-color: #1a1a1a;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.9);
+}
+
+.white-key:active {
+  transform: translateY(2px);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.9);
+  background-color: #e6e6e6;
+}
+
+.black-key:active {
+  transform: translateY(2px);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.9);
+  background-color: #1a1a1a;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: row;
+  border: 20px solid #bb8f5a; /* color del borde */
+  border-radius: 10px; /* radio de la curvatura del borde */
+  /* imagen de madera para el borde */
+  background-size: cover; /* cubrir todo el fondo del borde */
+  box-shadow: 20px 20px 15px 3px rgba(0, 0, 0, 0.75); /* sombra para el borde */
+  padding: 20px; /* espacio entre el borde y el teclado */
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Piano</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #eee;
+      }
+
+      .keyboard {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .key {
+        height: 200px;
+        width: 60px;
+        margin-right: 1px;
+        background-color: white;
+        border: 1px solid black;
+        cursor: pointer;
+      }
+
+      .black-key {
+        position: relative;
+        z-index: 1;
+        height: 120px;
+        width: 30px;
+        margin-right: -15px;
+        margin-left: -15px;
+        margin-top: 0px;
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="keyboard">
+        
+      <div class="key white-key" data-frequency="130.81"></div>
+      <div class="key black-key" data-frequency="138.59"></div>
+      <div class="key white-key" data-frequency="146.83"></div>
+      <div class="key black-key" data-frequency="155.56"></div>
+      <div class="key white-key" data-frequency="164.81"></div>
+      <div class="key white-key" data-frequency="174.61"></div>
+      <div class="key black-key" data-frequency="185"></div>
+      <div class="key white-key" data-frequency="196"></div>
+      <div class="key black-key" data-frequency="207.65"></div>
+      <div class="key white-key" data-frequency="220"></div>
+      <div class="key black-key" data-frequency="233.08"></div>
+      <div class="key white-key" data-frequency="246.94"></div> 
+         <div class="key white-key" data-frequency="261.62"></div>          
+      <div class="key black-key" data-frequency="277.18"></div>
+        <div class="key white-key" data-frequency="293.66"></div>
+  <div class="key black-key" data-frequency="311.13"></div>
+  <div class="key white-key" data-frequency="329.63"></div>
+  <div class="key white-key" data-frequency="349.23"></div>
+  <div class="key black-key" data-frequency="369.99"></div>
+  <div class="key white-key" data-frequency="392"></div>
+  <div class="key black-key" data-frequency="415.3"></div>
+  <div class="key white-key" data-frequency="440"></div>
+  <div class="key black-key" data-frequency="466.16"></div>
+  <div class="key white-key" data-frequency="493.88"></div>
+  <div class="key white-key" data-frequency="523.25"></div>
+</div>
+    
+<script>
+  
+  const whiteKeys = document.querySelectorAll('.white-key');
+      const blackKeys = document.querySelectorAll('.black-key');
+
+      const playNote = (frequency) => {
+        const context = new AudioContext();
+        const osc = context.createOscillator();
+        const envelope = context.createGain();
+        
+        osc.connect(envelope);
+        envelope.connect(context.destination);
+        
+        envelope.gain.setValueAtTime(22, context.currentTime);
+        envelope.gain.exponentialRampToValueAtTime(0.009, context.currentTime + 0.6);
+        
+        osc.frequency.setValueAtTime(frequency, context.currentTime);
+        osc.type = 'triangle';
+        
+        osc.start(context.currentTime);
+        osc.stop(context.currentTime + 1.0);
+      }
+          
+      whiteKeys.forEach((key) => {
+        key.addEventListener('mousedown', () => {
+          key.classList.add('active');
+          const frequency = key.dataset.frequency;
+          playNote(frequency);
+        });
+        key.addEventListener('mouseup', () => {
+          key.classList.remove('active');
+        });
+      });
+
+      blackKeys.forEach((key) => {
+        key.addEventListener('mousedown', () => {
+          key.classList.add('active');
+          const frequency = key.dataset.frequency;
+          playNote(frequency);
+        });
+        key.addEventListener('mouseup', () => {
+          key.classList.remove('active');
+        });
+      });
+    </script>
+  </body>
+</html>
+
+
+<script>
+
+
+
+
+
+//# sourceURL=userscript.js
+</script>
+</body>
+</html>
